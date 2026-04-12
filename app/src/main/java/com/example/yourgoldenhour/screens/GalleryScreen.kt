@@ -18,35 +18,12 @@ import com.example.yourgoldenhour.components.GalleryCard
 import com.example.yourgoldenhour.components.GalleryHeader
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 import androidx.compose.foundation.lazy.items
-
-data class Photo(
-    val id: Int,
-    val imageRes: Int,
-    val title: String,
-    val description: String,
-    val location: String,
-    val time: String,
-    val date: String
-)
-
-val photoList = listOf(
-    Photo(
-        1,
-        R.drawable.beauty,
-        "Любимый закат",
-        "Крутое описание",
-        "Такая-то такая-то",
-        "21:30",
-        "15 июня"
-    ),
-    Photo(2, R.drawable.city, "Город", "Крутое описание", "Такая-то такая-то", "21:30", "15 июня"),
-    Photo(3, R.drawable.third, "Горы", "Крутое описание", "Такая-то такая-то", "21:30", "15 июня"),
-)
+import com.example.yourgoldenhour.data.PhotoEntity
 
 
 @Composable
 fun GalleryScreen(
-    photos: List<Photo>,
+    photos: List<PhotoEntity>,
     onCardClick: (Int) -> Unit,
     paddings: PaddingValues
 ) {
@@ -86,35 +63,7 @@ fun GalleryScreen(
 fun PreviewGalleryScreen() {
     YourGoldenHourTheme {
         GalleryScreen(
-            listOf(
-                Photo(
-                    1,
-                    R.drawable.beauty,
-                    "Любимый закат",
-                    "Крутое описание",
-                    "Такая-то такая-то",
-                    "21:30",
-                    "15 июня"
-                ),
-                Photo(
-                    2,
-                    R.drawable.city,
-                    "Город",
-                    "Крутое описание",
-                    "Такая-то такая-то",
-                    "21:30",
-                    "15 июня"
-                ),
-                Photo(
-                    3,
-                    R.drawable.third,
-                    "Горы",
-                    "Крутое описание",
-                    "Такая-то такая-то",
-                    "21:30",
-                    "15 июня"
-                ),
-            ),
+            listOf(),
             {},
             PaddingValues(0.dp)
         )

@@ -1,8 +1,7 @@
 package com.example.yourgoldenhour.components
 
-
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import coil.compose.AsyncImage
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,18 +22,17 @@ import com.example.yourgoldenhour.R
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
-fun GoldenPhoto(photoRes: Int,
+fun GoldenPhoto(photoUri: String,
                 modifier: Modifier = Modifier) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(16.dp)
     ) {
-        Image(
-            painter = painterResource(photoRes),
+        AsyncImage(
+            model = photoUri.takeIf { it.isNotBlank() },
             contentDescription = "golden photo",
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxWidth()
-
         )
     }
 }
@@ -43,6 +41,6 @@ fun GoldenPhoto(photoRes: Int,
 @Composable
 fun PreviewGoldenPhoto() {
     YourGoldenHourTheme {
-        GoldenPhoto(R.drawable.city)
+        GoldenPhoto("")
     }
 }

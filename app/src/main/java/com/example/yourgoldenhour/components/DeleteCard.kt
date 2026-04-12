@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.yourgoldenhour.R
 import com.example.yourgoldenhour.screens.EditScreen
-import com.example.yourgoldenhour.screens.Photo
+import com.example.yourgoldenhour.data.PhotoEntity
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 
@@ -125,13 +125,13 @@ fun DeleteCard(
                     brush = SolidColor(MaterialTheme.colorScheme.onSurfaceVariant),
                     contentColor = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f),
-                    onClick = onDismiss)
+                    onClick = onDelete)
                 DialogButton(
                     text = "Отмена",
                     brush = gradient,
                     contentColor = MaterialTheme.colorScheme.surface,
                     modifier = Modifier.weight(1f),
-                    onClick = onDelete)
+                    onClick = onDismiss)
             }
 
         }
@@ -142,7 +142,7 @@ fun DeleteCard(
 @Composable
 fun PreviewDeleteCard() {
     YourGoldenHourTheme {
-        EditScreen(Photo(1, R.drawable.beauty, "Любимый закат", "Крутое описание", "Такая-то такая-то", "21:30", "15 июня"),
+        EditScreen(PhotoEntity(1, "Такая-то такая-то", "21:30", "15 июня", "12", "", 0.0, 0.0, ""),
             PaddingValues(0.dp),
             onBackClick = {},
         )

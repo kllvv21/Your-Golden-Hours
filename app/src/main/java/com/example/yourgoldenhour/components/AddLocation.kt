@@ -29,7 +29,7 @@ import com.example.yourgoldenhour.R
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
-fun AddLocationField(modifier: Modifier = Modifier){
+fun AddLocationField(locationName: String = "Выбрать точку на карте", modifier: Modifier = Modifier){
     val pinColor = MaterialTheme.colorScheme.secondary
     Column(modifier = modifier.fillMaxWidth()
         .graphicsLayer{
@@ -58,7 +58,7 @@ fun AddLocationField(modifier: Modifier = Modifier){
                 )
 
             }
-            Text(text = "Выбрать точку на карте", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+            Text(text = locationName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
 
 
         }

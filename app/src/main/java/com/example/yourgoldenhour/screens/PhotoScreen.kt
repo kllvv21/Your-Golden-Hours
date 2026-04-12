@@ -30,9 +30,11 @@ import com.example.yourgoldenhour.components.InfoField
 import com.example.yourgoldenhour.components.ScreenHeader
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
+import com.example.yourgoldenhour.data.PhotoEntity
+
 @Composable
 fun PhotoScreen(
-    photo: Photo,
+    photo: PhotoEntity,
     onBackClick: () -> Unit,
     onRightClick: () -> Unit,
     paddings: PaddingValues
@@ -56,7 +58,7 @@ fun PhotoScreen(
             }
             item {
                 GoldenPhoto(
-                    photoRes = photo.imageRes,
+                    photoUri = photo.photoUri,
                     modifier = Modifier.padding(horizontal = 45.dp)
                 )
             }
@@ -109,15 +111,7 @@ fun PhotoScreen(
 fun PreviewPhotoScreen() {
     YourGoldenHourTheme {
         PhotoScreen(
-            photo = Photo(
-                1,
-                R.drawable.beauty,
-                "Любимый закат",
-                "Крутое описание",
-                "Такая-то такая-то",
-                "21:30",
-                "15 июня"
-            ), onBackClick = {},
+            photo = PhotoEntity(1, "Такая-то такая-то", "21:30", "15 июня", "12", "", 0.0, 0.0, ""), onBackClick = {},
             onRightClick = {},
             paddings = PaddingValues(0.dp)
         )

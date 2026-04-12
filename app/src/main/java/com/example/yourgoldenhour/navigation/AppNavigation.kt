@@ -12,35 +12,35 @@ import com.example.yourgoldenhour.screens.AddPhotoScreen
 import com.example.yourgoldenhour.screens.EditScreen
 import com.example.yourgoldenhour.screens.GalleryScreen
 import com.example.yourgoldenhour.screens.MapScreen
-import com.example.yourgoldenhour.screens.Photo
 import com.example.yourgoldenhour.screens.PhotoScreen
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.yourgoldenhour.data.AppDatabase
+import com.example.yourgoldenhour.repository.PhotoRepository
+import com.example.yourgoldenhour.viewmodel.PhotoViewModel
+import com.example.yourgoldenhour.viewmodel.PhotoViewModelFactory
 
-val photoList = listOf(
-    Photo(
-        1,
-        R.drawable.beauty,
-        "Любимый закат",
-        "Крутое описание",
-        "Такая-то такая-то",
-        "21:30",
-        "15 июня"
-    ),
-    Photo(2, R.drawable.city, "Город", "Крутое описание", "Такая-то такая-то", "21:30", "15 июня"),
-    Photo(3, R.drawable.third, "Горы", "Крутое описание", "Такая-то такая-то", "21:30", "15 июня"),
-)
 
 @Composable
 fun AppNavigation(
     navController: NavHostController,
     innerPadding: PaddingValues,
 ) {
+    val context = LocalContext.current
+    val database = AppDatabase.getDatabase(context)
+    val repository = PhotoRepository(database.photoDao())
+    val photoViewModel: PhotoViewModel = viewModel(factory = PhotoViewModelFactory(repository))
+    val allPhotos by photoViewModel.allPhotos.collectAsState(initial = emptyList())
+
     NavHost(
         navController = navController,
         startDestination = Screen.Gallery.route,
     ) {
         composable(Screen.Gallery.route) {
             GalleryScreen(
-                photos = photoList,
+                photos = allPhotos,
                 onCardClick = { photoId ->
                     navController.navigate(Screen.PhotoScreen.createRoute(photoId))
                 },
@@ -48,12 +48,13 @@ fun AppNavigation(
             )
         }
         composable(Screen.Map.route) {
-            MapScreen()
+            MapScreen(mapPhotos = allPhotos)
         }
 
         composable(Screen.AddPhotoScreen.route) {
             AddPhotoScreen(
                 paddings = innerPadding,
+                viewModel = photoViewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }
@@ -64,7 +65,7 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val photoId = backStackEntry.arguments?.getInt("photoId") ?: return@composable
-            val photo = photoList.find { it.id == photoId } ?: photoList.first()
+            val photo = allPhotos.find { it.id == photoId } ?: return@composable
             PhotoScreen(
                 photo = photo,
                 onBackClick = { navController.popBackStack() },
@@ -85,10 +86,14 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val photoId = backStackEntry.arguments?.getInt("photoId") ?: return@composable
-            val photo = photoList.find { it.id == photoId } ?: photoList.first()
+            val photo = allPhotos.find { it.id == photoId } ?: return@composable
             EditScreen(
                 photo = photo,
+                viewModel = photoViewModel,
                 onBackClick = { navController.popBackStack() },
+                onDeleteComplete = { 
+                    navController.popBackStack(Screen.Gallery.route, inclusive = false) 
+                },
                 paddings = innerPadding
             )
         }

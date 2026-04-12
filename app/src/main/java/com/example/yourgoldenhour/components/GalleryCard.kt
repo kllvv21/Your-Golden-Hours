@@ -1,7 +1,7 @@
 package com.example.yourgoldenhour.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import coil.compose.AsyncImage
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,12 +22,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.yourgoldenhour.R
-import com.example.yourgoldenhour.screens.Photo
+import com.example.yourgoldenhour.data.PhotoEntity
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
 fun GalleryCard(
-    photo: Photo,
+    photo: PhotoEntity,
     modifier: Modifier = Modifier,
     onCardClick: (Int) -> Unit
 ) {
@@ -49,8 +49,8 @@ fun GalleryCard(
         shape = RoundedCornerShape(16.dp),
         onClick = { onCardClick(photo.id) }
     ) {
-        Image(
-            painter = painterResource(id = photo.imageRes),
+        AsyncImage(
+            model = photo.photoUri.takeIf { it.isNotBlank() },
             contentDescription = photo.title,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxWidth()
@@ -104,7 +104,6 @@ fun GalleryCard(
 @Composable
 fun PreviewCard() {
     YourGoldenHourTheme {
-        GalleryCard(Photo(1, R.drawable.city, "12", "","Такая-то такая-то", "21:30", "15 июня"), Modifier, {})
+        GalleryCard(PhotoEntity(1, "Такая-то такая-то", "21:30", "15 июня", "12", "", 0.0, 0.0, ""), Modifier, {})
     }
-
 }

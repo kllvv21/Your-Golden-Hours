@@ -21,6 +21,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
@@ -31,13 +32,14 @@ import com.example.yourgoldenhour.R
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
-fun AddPhotoButton(modifier: Modifier = Modifier){
+fun AddPhotoButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}){
     val gradient = Brush.linearGradient(colors = listOf(MaterialTheme.colorScheme.secondary,
         MaterialTheme.colorScheme.primary))
     val shadowColor = MaterialTheme.colorScheme.secondary
     val strokeColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
     Column(modifier = modifier
         .fillMaxWidth()
+        .clickable { onClick() }
         .aspectRatio(1.3f)
         .graphicsLayer{
             shadowElevation = 20.dp.toPx()

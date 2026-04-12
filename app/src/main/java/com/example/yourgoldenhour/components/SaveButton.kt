@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,13 +18,14 @@ import androidx.compose.ui.unit.dp
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
-fun SaveButton(modifier: Modifier = Modifier){
+fun SaveButton(modifier: Modifier = Modifier, onClick: () -> Unit = {}){
     val shadowColor = MaterialTheme.colorScheme.secondary
     val gradient = Brush.linearGradient(colors = listOf(
         MaterialTheme.colorScheme.primary,
         MaterialTheme.colorScheme.secondary))
     Column(modifier = modifier
         .fillMaxWidth()
+        .clickable { onClick() }
         .graphicsLayer{
             shadowElevation = 15.dp.toPx()
             shape = RoundedCornerShape(16.dp)

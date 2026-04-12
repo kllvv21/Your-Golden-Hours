@@ -18,11 +18,11 @@ import com.example.yourgoldenhour.R
 import com.example.yourgoldenhour.components.BottomMenu
 import com.example.yourgoldenhour.components.LocationSearchBar
 import com.example.yourgoldenhour.components.MapInfoCard
-import com.example.yourgoldenhour.navigation.photoList
+import com.example.yourgoldenhour.data.PhotoEntity
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 @Composable
-fun MapScreen() {
+fun MapScreen(mapPhotos: List<PhotoEntity>) {
     val searchPaddings = Modifier.padding(20.dp)
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -33,7 +33,9 @@ fun MapScreen() {
             contentScale = ContentScale.Crop
         )
 
-        MapInfoCard(photoList, modifier = Modifier.align(Alignment.Center))
+        if (mapPhotos.isNotEmpty()) {
+            MapInfoCard(mapPhotos, modifier = Modifier.align(Alignment.Center))
+        }
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -50,7 +52,7 @@ fun MapScreen() {
 @Composable
 fun PreviewMapScreen() {
     YourGoldenHourTheme {
-        MapScreen()
+        MapScreen(emptyList())
     }
 
 }

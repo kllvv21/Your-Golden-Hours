@@ -1,6 +1,6 @@
 package com.example.yourgoldenhour.components
 
-import androidx.compose.foundation.Image
+import coil.compose.AsyncImage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.example.yourgoldenhour.R
-import com.example.yourgoldenhour.screens.Photo
+import com.example.yourgoldenhour.data.PhotoEntity
 import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 
 class MapBubbleShape(
@@ -60,7 +60,7 @@ class MapBubbleShape(
 
 @Composable
 fun MapInfoCard(
-    photos: List<Photo>,
+    photos: List<PhotoEntity>,
     modifier: Modifier = Modifier
 ) {
     val pagerState = rememberPagerState(pageCount = { photos.size })
@@ -85,8 +85,8 @@ fun MapInfoCard(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
-                Image(
-                    painter = painterResource(id = photos[page].imageRes),
+                AsyncImage(
+                    model = photos[page].photoUri.takeIf { it.isNotBlank() },
                     contentDescription = null,
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop
@@ -120,8 +120,8 @@ fun MapInfoCard(
 @Composable
 fun PreviewMapInfoCard() {
     val testPhotos = listOf(
-        Photo(1, R.drawable.beauty, "Закат", "Описание", "Локация", "19:21", "Дата"),
-        Photo(2, R.drawable.city, "Город", "Описание", "Локация", "21:00", "Дата")
+        PhotoEntity(1, "Такая-то такая-то", "19:21", "Дата", "Закат", "", 0.0, 0.0, ""),
+        PhotoEntity(2, "Такая-то такая-то", "21:00", "Дата", "Город", "", 0.0, 0.0, "")
     )
 
     YourGoldenHourTheme {
