@@ -1,8 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
 }
+
+val localProperties = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val yandexMapkitApiKey: String = localProperties
+    .getProperty("YANDEX_MAPKIT_API_KEY")
+    ?.trim()
+    ?.trim('"')
+    ?: ""
 
 android {
     namespace = "com.example.yourgoldenhour"
@@ -20,6 +32,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders["YANDEX_MAPKIT_API_KEY"] = yandexMapkitApiKey
+        buildConfigField("String", "YANDEX_MAPKIT_API_KEY", "\"$yandexMapkitApiKey\"")
     }
 
     buildTypes {
@@ -37,12 +51,14 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -63,4 +79,9 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.coil.compose)
     implementation(libs.androidx.exifinterface)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson)
+    implementation(libs.google.play.services.location)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.yandex.mapkit)
 }

@@ -57,7 +57,7 @@ fun BottomMenu(currentScreen: String?,
 
     Box(
         modifier = modifier
-            .padding(horizontal = 43.dp, vertical = 10.dp)
+            .padding(start = 43.dp, end = 43.dp, top = 10.dp, bottom = 15.dp)
             .fillMaxWidth()
             .graphicsLayer {
                 shadowElevation = 15.dp.toPx()

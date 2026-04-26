@@ -31,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -84,12 +85,11 @@ fun AddPhotoScreen(paddings:PaddingValues,
 
     val context = LocalContext.current
     val coroutineScope = androidx.compose.runtime.rememberCoroutineScope()
-    
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
+    val onImageSelectedState = rememberUpdatedState<(Uri?) -> Unit> { uri ->
         uri?.let {
             locationName = "Неизвестная локация"
+            detectedLatitude = 0.0
+            detectedLongitude = 0.0
             try {
                 context.contentResolver.openInputStream(it)?.use { inputStream ->
                     val exif = ExifInterface(inputStream)
@@ -98,7 +98,7 @@ fun AddPhotoScreen(paddings:PaddingValues,
                         detectedLatitude = latLong[0]
                         detectedLongitude = latLong[1]
                         locationName = "Определение локации..."
-                        
+
                         coroutineScope.launch(kotlinx.coroutines.Dispatchers.IO) {
                             try {
                                 val geocoder = android.location.Geocoder(context, java.util.Locale.getDefault())
@@ -172,6 +172,26 @@ fun AddPhotoScreen(paddings:PaddingValues,
         }
     }
 
+    val photoPickerLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        onImageSelectedState.value(uri)
+    }
+
+    val galleryFallbackLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        onImageSelectedState.value(uri)
+    }
+
+    val openImagePicker = {
+        if (ActivityResultContracts.PickVisualMedia.isPhotoPickerAvailable(context)) {
+            photoPickerLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        } else {
+            galleryFallbackLauncher.launch("image/*")
+        }
+    }
+
     val horizontalPadding = Modifier.padding(horizontal = 25.dp)
     BlobBackground {
         LazyColumn(
@@ -194,7 +214,7 @@ fun AddPhotoScreen(paddings:PaddingValues,
                         modifier = Modifier
                             .padding(horizontal = 60.dp, vertical = 20.dp),
                         onClick = {
-                            launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            openImagePicker()
                         }
                     )
                 } else {
@@ -208,7 +228,7 @@ fun AddPhotoScreen(paddings:PaddingValues,
                             .aspectRatio(1.3f)
                             .clip(RoundedCornerShape(16.dp))
                             .clickable {
-                                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                                openImagePicker()
                             }
                     )
                 }

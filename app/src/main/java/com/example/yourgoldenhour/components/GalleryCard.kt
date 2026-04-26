@@ -29,7 +29,7 @@ import com.example.yourgoldenhour.ui.theme.YourGoldenHourTheme
 fun GalleryCard(
     photo: PhotoEntity,
     modifier: Modifier = Modifier,
-    onCardClick: (Int) -> Unit
+    onCardClick: (Long) -> Unit
 ) {
     val shadowColor = MaterialTheme.colorScheme.secondary
 

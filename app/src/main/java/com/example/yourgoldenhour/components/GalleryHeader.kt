@@ -57,11 +57,11 @@ fun GalleryHeader(
 }
 
 
-@Preview
-@Composable
-fun PreviewGalleryHeader() {
-    YourGoldenHourTheme {
-        GalleryHeader(time = "12:34 - 13:34", location = "Красноярск")
-    }
-
-}
+//@Preview
+//@Composable
+//fun PreviewGalleryHeader() {
+//    YourGoldenHourTheme {
+//        GalleryHeader(time = "12:34 - 13:34", location = "Красноярск")
+//    }
+//
+//}
